@@ -1,0 +1,40 @@
+{
+  "name": "aave-style-lending-protocol",
+  "version": "1.0.0",
+  "description": "Aave-style decentralized lending protocol on Polygon Amoy testnet",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "deploy:amoy": "hardhat run scripts/deploy.js --network amoy",
+    "demo": "bash demo.sh",
+    "node": "hardhat node",
+    "clean": "hardhat clean"
+  },
+  "keywords": [
+    "defi",
+    "lending",
+    "aave",
+    "polygon",
+    "ethereum",
+    "solidity"
+    
+  ],
+  "author": "Lending Protocol Team",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "@openzeppelin/contracts": "^5.0.0",
+    "@openzeppelin/test-helpers": "^0.5.16",
+    "chai": "^4.3.10",
+    "dotenv": "^16.3.1",
+    "hardhat": "^2.19.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "solidity-coverage": "^0.8.5"
+  },
+  "dependencies": {
+    "ethers": "^6.8.0"
+  }
+}
