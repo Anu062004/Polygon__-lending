@@ -3,9 +3,11 @@ import { useAccount } from 'wagmi'
 import { Plus, Minus } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { getAllTokens } from '../utils/contracts'
+import { useLendingDemo } from '../context/LendingDemoProvider'
 
 export function SupplySection() {
   const { address } = useAccount()
+  const demo = useLendingDemo()
   const [selectedToken, setSelectedToken] = useState('mUSDC')
   const [amount, setAmount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -25,9 +27,7 @@ export function SupplySection() {
 
     setIsLoading(true)
     try {
-      // Mock supply action
-      console.log(`Supplying ${amount} ${selectedToken}`)
-      toast.success(`Supplied ${amount} ${selectedToken} successfully!`)
+      demo.actions.supply(selectedToken, amount)
       setAmount('')
     } catch (error) {
       toast.error('Supply failed: ' + error.message)
@@ -49,9 +49,7 @@ export function SupplySection() {
 
     setIsLoading(true)
     try {
-      // Mock withdraw action
-      console.log(`Withdrawing ${amount} ${selectedToken}`)
-      toast.success(`Withdrew ${amount} ${selectedToken} successfully!`)
+      demo.actions.withdraw(selectedToken, amount)
       setAmount('')
     } catch (error) {
       toast.error('Withdraw failed: ' + error.message)
@@ -67,7 +65,7 @@ export function SupplySection() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-6">
         Supply Assets
       </h3>
@@ -82,10 +80,10 @@ export function SupplySection() {
               <button
                 key={token.symbol}
                 onClick={() => setSelectedToken(token.symbol)}
-                className={`p-3 rounded-lg border-2 transition-colors ${
+                className={`p-3 rounded-xl border-2 transition-all ${
                   selectedToken === token.symbol
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-indigo-500 bg-indigo-50 shadow'
+                    : 'border-gray-200 hover:border-gray-300 hover:shadow'
                 }`}
               >
                 <div className="text-center">
@@ -147,11 +145,11 @@ export function SupplySection() {
             </div>
             <div className="flex justify-between">
               <span>Available:</span>
-              <span>1,000 {selectedToken}</span>
+              <span>{demo.balances[selectedToken]} {selectedToken}</span>
             </div>
             <div className="flex justify-between">
               <span>Supplied:</span>
-              <span>500 {selectedToken}</span>
+              <span>{demo.supplied[selectedToken]} {selectedToken}</span>
             </div>
             <div className="flex justify-between">
               <span>Collateral Factor:</span>

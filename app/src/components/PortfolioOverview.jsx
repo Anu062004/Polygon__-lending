@@ -1,4 +1,5 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 import { useAccount } from 'wagmi'
 import { TrendingUp, TrendingDown, DollarSign, Activity } from 'lucide-react'
 import { useLendingData } from '../hooks/useLendingData'
@@ -46,13 +47,19 @@ export function PortfolioOverview() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <motion.div
+      className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6"
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.5 }}
+    >
       <h3 className="text-xl font-semibold text-gray-900 mb-6">
         Portfolio Overview
       </h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-green-50 rounded-lg p-4">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-green-100 bg-gradient-to-br from-green-50 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-green-600 font-medium">Total Supplied</p>
@@ -62,9 +69,9 @@ export function PortfolioOverview() {
             </div>
             <TrendingUp className="h-8 w-8 text-green-600" />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="bg-red-50 rounded-lg p-4">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-red-100 bg-gradient-to-br from-red-50 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-red-600 font-medium">Total Borrowed</p>
@@ -74,9 +81,9 @@ export function PortfolioOverview() {
             </div>
             <TrendingDown className="h-8 w-8 text-red-600" />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="bg-blue-50 rounded-lg p-4">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-blue-100 bg-gradient-to-br from-blue-50 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-blue-600 font-medium">Net Worth</p>
@@ -86,9 +93,9 @@ export function PortfolioOverview() {
             </div>
             <DollarSign className="h-8 w-8 text-blue-600" />
           </div>
-        </div>
+        </motion.div>
 
-        <div className="bg-purple-50 rounded-lg p-4">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-purple-100 bg-gradient-to-br from-purple-50 to-white">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-purple-600 font-medium">Health Factor</p>
@@ -98,11 +105,11 @@ export function PortfolioOverview() {
             </div>
             <Activity className="h-8 w-8 text-purple-600" />
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {portfolioData?.healthFactor && portfolioData.healthFactor < 1.5 && portfolioData.healthFactor !== Infinity && (
-        <div className="mt-6 bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="mt-6 bg-yellow-50/70 backdrop-blur border border-yellow-200 rounded-lg p-4">
           <div className="flex items-start space-x-2">
             <div className="text-yellow-600">⚠️</div>
             <div className="text-sm text-yellow-800">
@@ -112,7 +119,7 @@ export function PortfolioOverview() {
           </div>
         </div>
       )}
-    </div>
+    </motion.div>
   )
 }
 

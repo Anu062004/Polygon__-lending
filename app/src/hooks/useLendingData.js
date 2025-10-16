@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { ethers } from 'ethers'
-import { getContractAddresses } from '../utils/contracts'
+import { useLendingDemo } from '../context/LendingDemoProvider'
 
 export function useLendingData(address) {
   const [portfolioData, setPortfolioData] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const demo = useLendingDemo()
 
   useEffect(() => {
     if (!address) {
@@ -18,33 +18,17 @@ export function useLendingData(address) {
       try {
         setIsLoading(true)
         setError(null)
-
-        // Mock data for now - in real implementation, this would fetch from contracts
-        const mockData = {
-          totalSupplied: 125000,
-          totalBorrowed: 45000,
-          netWorth: 80000,
-          healthFactor: 2.5,
+        await new Promise(r => setTimeout(r, 200))
+        setPortfolioData({
+          totalSupplied: demo.totalsUsd.suppliedUsd,
+          totalBorrowed: demo.totalsUsd.borrowedUsd,
+          netWorth: demo.netWorthUsd,
+          healthFactor: demo.healthFactor,
           assets: {
-            mUSDC: {
-              supplied: 1000,
-              borrowed: 200,
-              supplyRate: 3.2,
-              borrowRate: 5.8,
-            },
-            mBTC: {
-              supplied: 0.02,
-              borrowed: 0,
-              supplyRate: 1.5,
-              borrowRate: 4.5,
-            },
+            mUSDC: { supplied: demo.supplied.mUSDC, borrowed: demo.borrowed.mUSDC, supplyRate: 3.2, borrowRate: 5.8 },
+            mBTC: { supplied: demo.supplied.mBTC, borrowed: demo.borrowed.mBTC, supplyRate: 1.5, borrowRate: 4.5 },
           },
-        }
-
-        // Simulate API call delay
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        
-        setPortfolioData(mockData)
+        })
       } catch (err) {
         setError(err.message)
       } finally {
@@ -53,7 +37,7 @@ export function useLendingData(address) {
     }
 
     fetchData()
-  }, [address])
+  }, [address, demo])
 
   return { portfolioData, isLoading, error }
 }

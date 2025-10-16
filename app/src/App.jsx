@@ -10,10 +10,11 @@ import './styles/index.css'
 
 import { Dashboard } from './components/Dashboard'
 import { Header } from './components/Header'
+import { LendingDemoProvider } from './context/LendingDemoProvider'
 
 // Configure Wagmi
 const config = getDefaultConfig({
-  appName: 'Aave-style Lending Protocol',
+  appName: 'DebPol',
   projectId: 'YOUR_PROJECT_ID', // Replace with your WalletConnect project ID
   chains: [polygonAmoy],
   ssr: true,
@@ -27,22 +28,24 @@ function App() {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
-          <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-            <Header />
-            <main className="container mx-auto px-4 py-8">
-              <Dashboard />
-            </main>
-            <Toaster 
-              position="top-right"
-              toastOptions={{
-                duration: 4000,
-                style: {
-                  background: '#363636',
-                  color: '#fff',
-                },
-              }}
-            />
-          </div>
+          <LendingDemoProvider>
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+              <Header />
+              <main className="container mx-auto px-4 py-8">
+                <Dashboard />
+              </main>
+              <Toaster 
+                position="top-right"
+                toastOptions={{
+                  duration: 4000,
+                  style: {
+                    background: '#363636',
+                    color: '#fff',
+                  },
+                }}
+              />
+            </div>
+          </LendingDemoProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

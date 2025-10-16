@@ -3,10 +3,12 @@ import { useAccount } from 'wagmi'
 import { Droplets, Coins } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { getAllTokens } from '../utils/contracts'
+import { useLendingDemo } from '../context/LendingDemoProvider'
 
 export function FaucetSection() {
   const { address } = useAccount()
   const [isLoading, setIsLoading] = useState(false)
+  const demo = useLendingDemo()
 
   const tokens = getAllTokens()
 
@@ -18,9 +20,7 @@ export function FaucetSection() {
 
     setIsLoading(true)
     try {
-      // Mock mint action
-      console.log(`Minting ${tokenSymbol} to ${address}`)
-      toast.success(`Minted ${tokenSymbol} successfully!`)
+      demo.actions.mintFromFaucet(tokenSymbol)
     } catch (error) {
       toast.error('Mint failed: ' + error.message)
     } finally {
@@ -34,7 +34,7 @@ export function FaucetSection() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
         <Droplets className="h-6 w-6 text-blue-600 mr-2" />
         Test Token Faucet

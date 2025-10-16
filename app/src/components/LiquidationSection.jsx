@@ -3,9 +3,11 @@ import { useAccount } from 'wagmi'
 import { AlertTriangle, Zap } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { getAllTokens } from '../utils/contracts'
+import { useLendingDemo } from '../context/LendingDemoProvider'
 
 export function LiquidationSection() {
   const { address } = useAccount()
+  const demo = useLendingDemo()
   const [collateralToken, setCollateralToken] = useState('mBTC')
   const [debtToken, setDebtToken] = useState('mUSDC')
   const [borrowerAddress, setBorrowerAddress] = useState('')
@@ -32,8 +34,7 @@ export function LiquidationSection() {
 
     setIsLoading(true)
     try {
-      // Mock liquidation action
-      console.log(`Liquidating ${debtAmount} ${debtToken} for borrower ${borrowerAddress}`)
+      demo.actions.liquidate()
       toast.success(`Liquidation successful! Received ${collateralToken} as reward.`)
       setBorrowerAddress('')
       setDebtAmount('')
@@ -62,7 +63,7 @@ export function LiquidationSection() {
   ]
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-6 flex items-center">
         <AlertTriangle className="h-6 w-6 text-red-600 mr-2" />
         Liquidation

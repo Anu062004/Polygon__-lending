@@ -3,6 +3,8 @@ import { useAccount, useChainId } from 'wagmi'
 import { polygonAmoy } from 'wagmi/chains'
 
 import { WalletConnect } from './WalletConnect'
+import { HeroLogo } from './HeroLogo'
+import { MarketTable } from './MarketTable'
 import { PortfolioOverview } from './PortfolioOverview'
 import { SupplySection } from './SupplySection'
 import { BorrowSection } from './BorrowSection'
@@ -39,6 +41,7 @@ export function Dashboard() {
 
   return (
     <div className="space-y-8">
+      <HeroLogo />
       <div className="text-center">
         <h2 className="text-3xl font-bold text-gray-900 mb-2">
           Lending Dashboard
@@ -52,6 +55,8 @@ export function Dashboard() {
       </div>
 
       <PortfolioOverview />
+
+      <MarketTable />
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <SupplySection />

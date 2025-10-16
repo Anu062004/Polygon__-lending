@@ -3,9 +3,11 @@ import { useAccount } from 'wagmi'
 import { ArrowUpRight, ArrowDownLeft } from 'lucide-react'
 import { toast } from 'react-hot-toast'
 import { getAllTokens } from '../utils/contracts'
+import { useLendingDemo } from '../context/LendingDemoProvider'
 
 export function BorrowSection() {
   const { address } = useAccount()
+  const demo = useLendingDemo()
   const [selectedToken, setSelectedToken] = useState('mUSDC')
   const [amount, setAmount] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -25,9 +27,7 @@ export function BorrowSection() {
 
     setIsLoading(true)
     try {
-      // Mock borrow action
-      console.log(`Borrowing ${amount} ${selectedToken}`)
-      toast.success(`Borrowed ${amount} ${selectedToken} successfully!`)
+      demo.actions.borrow(selectedToken, amount, demo.availableToBorrowUsd)
       setAmount('')
     } catch (error) {
       toast.error('Borrow failed: ' + error.message)
@@ -49,9 +49,7 @@ export function BorrowSection() {
 
     setIsLoading(true)
     try {
-      // Mock repay action
-      console.log(`Repaying ${amount} ${selectedToken}`)
-      toast.success(`Repaid ${amount} ${selectedToken} successfully!`)
+      demo.actions.repay(selectedToken, amount)
       setAmount('')
     } catch (error) {
       toast.error('Repay failed: ' + error.message)
@@ -67,7 +65,7 @@ export function BorrowSection() {
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6">
       <h3 className="text-xl font-semibold text-gray-900 mb-6">
         Borrow Assets
       </h3>
@@ -82,10 +80,10 @@ export function BorrowSection() {
               <button
                 key={token.symbol}
                 onClick={() => setSelectedToken(token.symbol)}
-                className={`p-3 rounded-lg border-2 transition-colors ${
+                className={`p-3 rounded-xl border-2 transition-all ${
                   selectedToken === token.symbol
-                    ? 'border-primary-500 bg-primary-50'
-                    : 'border-gray-200 hover:border-gray-300'
+                    ? 'border-orange-500 bg-orange-50 shadow'
+                    : 'border-gray-200 hover:border-gray-300 hover:shadow'
                 }`}
               >
                 <div className="text-center">
@@ -146,12 +144,12 @@ export function BorrowSection() {
               <span className="text-red-600">5.8%</span>
             </div>
             <div className="flex justify-between">
-              <span>Available to Borrow:</span>
-              <span>2,500 {selectedToken}</span>
+              <span>Available to Borrow (USD):</span>
+              <span>{Math.floor(demo.availableToBorrowUsd)}</span>
             </div>
             <div className="flex justify-between">
               <span>Borrowed:</span>
-              <span>1,200 {selectedToken}</span>
+              <span>{demo.borrowed[selectedToken]} {selectedToken}</span>
             </div>
             <div className="flex justify-between">
               <span>Collateral Factor:</span>
