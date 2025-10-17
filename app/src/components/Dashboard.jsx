@@ -3,7 +3,6 @@ import { useAccount, useChainId } from 'wagmi'
 import { polygonAmoy } from 'wagmi/chains'
 
 import { WalletConnect } from './WalletConnect'
-import { HeroLogo } from './HeroLogo'
 import { MarketTable } from './MarketTable'
 import { PortfolioOverview } from './PortfolioOverview'
 import { SupplySection } from './SupplySection'
@@ -40,32 +39,33 @@ export function Dashboard() {
   }
 
   return (
-    <div className="space-y-8">
-      <HeroLogo />
-      <div className="text-center">
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">
-          Lending Dashboard
-        </h2>
-        <p className="text-gray-600">
-          Supply assets to earn interest or borrow against your collateral
-        </p>
-        <p className="text-sm text-gray-500 mt-2">
-          Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
-        </p>
-      </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="space-y-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] mb-2">
+            Lending Dashboard
+          </h2>
+          <p className="text-indigo-100/90 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)]">
+            Supply assets to earn interest or borrow against your collateral
+          </p>
+          <p className="text-sm text-indigo-100/80 drop-shadow-[0_1px_6px_rgba(0,0,0,0.35)] mt-2">
+            Connected: {address?.slice(0, 6)}...{address?.slice(-4)}
+          </p>
+        </div>
 
-      <PortfolioOverview />
+        <PortfolioOverview />
 
-      <MarketTable />
-      
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <SupplySection />
-        <BorrowSection />
-      </div>
+        <MarketTable />
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <SupplySection />
+          <BorrowSection />
+        </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <LiquidationSection />
-        <FaucetSection />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <LiquidationSection />
+          <FaucetSection />
+        </div>
       </div>
     </div>
   )

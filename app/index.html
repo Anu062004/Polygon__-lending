@@ -9,6 +9,29 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Suppress development warnings
+      const originalConsoleWarn = console.warn;
+      const originalConsoleInfo = console.info;
+      
+      console.warn = function(...args) {
+        const message = args.join(' ');
+        if (message.includes('Lit is in dev mode') || 
+            message.includes('lit.dev/msg/dev-mode') ||
+            message.includes('Download the React DevTools')) {
+          return; // Suppress these specific warnings
+        }
+        originalConsoleWarn.apply(console, args);
+      };
+      
+      console.info = function(...args) {
+        const message = args.join(' ');
+        if (message.includes('Download the React DevTools')) {
+          return; // Suppress React DevTools info message
+        }
+        originalConsoleInfo.apply(console, args);
+      };
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

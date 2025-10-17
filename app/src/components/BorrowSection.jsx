@@ -65,14 +65,14 @@ export function BorrowSection() {
   }
 
   return (
-    <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6">
-      <h3 className="text-xl font-semibold text-gray-900 mb-6">
+    <div className="bg-slate-900/60 backdrop-blur rounded-2xl shadow-xl ring-1 ring-white/10 p-6">
+      <h3 className="text-xl font-semibold text-white mb-6">
         Borrow Assets
       </h3>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-indigo-100/80 mb-2">
             Select Asset
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -82,13 +82,13 @@ export function BorrowSection() {
                 onClick={() => setSelectedToken(token.symbol)}
                 className={`p-3 rounded-xl border-2 transition-all ${
                   selectedToken === token.symbol
-                    ? 'border-orange-500 bg-orange-50 shadow'
-                    : 'border-gray-200 hover:border-gray-300 hover:shadow'
+                    ? 'border-orange-400/60 bg-slate-800/60 shadow'
+                    : 'border-white/10 hover:border-white/20 hover:shadow'
                 }`}
               >
                 <div className="text-center">
                   <div className="text-2xl mb-1">{token.icon}</div>
-                  <div className="text-sm font-medium">{token.symbol}</div>
+                  <div className="text-sm font-medium text-white">{token.symbol}</div>
                 </div>
               </button>
             ))}
@@ -96,7 +96,7 @@ export function BorrowSection() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-indigo-100/80 mb-2">
             Amount
           </label>
           <div className="relative">
@@ -105,11 +105,11 @@ export function BorrowSection() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent pr-16"
+              className="w-full p-3 border border-white/10 bg-slate-800/60 text-white placeholder-white/40 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-16"
             />
             <button
               onClick={setMaxAmount}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-indigo-300 hover:text-indigo-200 font-medium"
             >
               MAX
             </button>
@@ -136,12 +136,12 @@ export function BorrowSection() {
           </button>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 mb-2">Borrow Info</h4>
-          <div className="space-y-1 text-sm text-gray-600">
+        <div className="bg-slate-800/60 rounded-lg p-4 border border-white/10">
+          <h4 className="font-medium text-white mb-2">Borrow Info</h4>
+          <div className="space-y-1 text-sm text-indigo-100/80">
             <div className="flex justify-between">
               <span>Borrow APY:</span>
-              <span className="text-red-600">5.8%</span>
+              <span className="text-red-300">5.8%</span>
             </div>
             <div className="flex justify-between">
               <span>Available to Borrow (USD):</span>
@@ -158,12 +158,12 @@ export function BorrowSection() {
           </div>
         </div>
 
-        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
           <div className="flex items-start space-x-2">
-            <div className="text-yellow-600">⚠️</div>
-            <div className="text-sm text-yellow-800">
+            <div className="text-yellow-300">⚠️</div>
+            <div className="text-sm text-yellow-200">
               <p className="font-medium">Health Factor Warning</p>
-              <p>Keep your health factor above 1.5 to avoid liquidation</p>
+              <p className="text-yellow-300">Keep your health factor above 1.5 to avoid liquidation</p>
             </div>
           </div>
         </div>

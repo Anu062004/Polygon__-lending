@@ -11,6 +11,7 @@ import './styles/index.css'
 import { Dashboard } from './components/Dashboard'
 import { Header } from './components/Header'
 import { LendingDemoProvider } from './context/LendingDemoProvider'
+import { Fullscreen3DBackground } from './components/Fullscreen3DBackground'
 
 // Configure Wagmi
 const config = getDefaultConfig({
@@ -29,9 +30,10 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider>
           <LendingDemoProvider>
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+            <div className="min-h-screen relative">
+              <Fullscreen3DBackground />
               <Header />
-              <main className="container mx-auto px-4 py-8">
+              <main>
                 <Dashboard />
               </main>
               <Toaster 
