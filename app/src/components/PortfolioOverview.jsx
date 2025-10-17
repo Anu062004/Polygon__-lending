@@ -48,73 +48,73 @@ export function PortfolioOverview() {
 
   return (
     <motion.div
-      className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6"
+      className="bg-slate-900/60 backdrop-blur rounded-2xl shadow-xl ring-1 ring-white/10 p-6"
       initial={{ opacity: 0, y: 12 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.5 }}
     >
-      <h3 className="text-xl font-semibold text-gray-900 mb-6">
+      <h3 className="text-xl font-semibold text-white mb-6">
         Portfolio Overview
       </h3>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-green-100 bg-gradient-to-br from-green-50 to-white">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-green-500/20 bg-slate-800/60">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-green-600 font-medium">Total Supplied</p>
-              <p className="text-2xl font-bold text-green-700">
+              <p className="text-sm text-green-300 font-medium">Total Supplied</p>
+              <p className="text-2xl font-bold text-green-200">
                 {formatCurrency(portfolioData?.totalSupplied || 0)}
               </p>
             </div>
-            <TrendingUp className="h-8 w-8 text-green-600" />
+            <TrendingUp className="h-8 w-8 text-green-400" />
           </div>
         </motion.div>
 
-        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-red-100 bg-gradient-to-br from-red-50 to-white">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-red-500/20 bg-slate-800/60">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-red-600 font-medium">Total Borrowed</p>
-              <p className="text-2xl font-bold text-red-700">
+              <p className="text-sm text-red-300 font-medium">Total Borrowed</p>
+              <p className="text-2xl font-bold text-red-200">
                 {formatCurrency(portfolioData?.totalBorrowed || 0)}
               </p>
             </div>
-            <TrendingDown className="h-8 w-8 text-red-600" />
+            <TrendingDown className="h-8 w-8 text-red-400" />
           </div>
         </motion.div>
 
-        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-blue-100 bg-gradient-to-br from-blue-50 to-white">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-blue-500/20 bg-slate-800/60">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-blue-600 font-medium">Net Worth</p>
-              <p className="text-2xl font-bold text-blue-700">
+              <p className="text-sm text-blue-300 font-medium">Net Worth</p>
+              <p className="text-2xl font-bold text-blue-200">
                 {formatCurrency(portfolioData?.netWorth || 0)}
               </p>
             </div>
-            <DollarSign className="h-8 w-8 text-blue-600" />
+            <DollarSign className="h-8 w-8 text-blue-400" />
           </div>
         </motion.div>
 
-        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-purple-100 bg-gradient-to-br from-purple-50 to-white">
+        <motion.div whileHover={{ y: -2 }} className="rounded-xl p-4 border border-purple-500/20 bg-slate-800/60">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-purple-600 font-medium">Health Factor</p>
+              <p className="text-sm text-purple-300 font-medium">Health Factor</p>
               <p className={`text-2xl font-bold ${getHealthFactorColor(portfolioData?.healthFactor || 0)}`}>
                 {getHealthFactorText(portfolioData?.healthFactor || 0)}
               </p>
             </div>
-            <Activity className="h-8 w-8 text-purple-600" />
+            <Activity className="h-8 w-8 text-purple-400" />
           </div>
         </motion.div>
       </div>
 
       {portfolioData?.healthFactor && portfolioData.healthFactor < 1.5 && portfolioData.healthFactor !== Infinity && (
-        <div className="mt-6 bg-yellow-50/70 backdrop-blur border border-yellow-200 rounded-lg p-4">
+        <div className="mt-6 bg-yellow-500/10 backdrop-blur border border-yellow-500/30 rounded-lg p-4">
           <div className="flex items-start space-x-2">
-            <div className="text-yellow-600">⚠️</div>
-            <div className="text-sm text-yellow-800">
+            <div className="text-yellow-300">⚠️</div>
+            <div className="text-sm text-yellow-200">
               <p className="font-medium">Health Factor Warning</p>
-              <p>Your health factor is below 1.5. Consider adding more collateral or repaying debt to avoid liquidation.</p>
+              <p className="text-yellow-300">Your health factor is below 1.5. Consider adding more collateral or repaying debt to avoid liquidation.</p>
             </div>
           </div>
         </div>

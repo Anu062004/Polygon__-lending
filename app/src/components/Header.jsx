@@ -10,7 +10,7 @@ export function Header() {
   const isCorrectNetwork = chainId === polygonAmoy.id
 
   return (
-    <header className="sticky top-0 z-40 bg-white/70 backdrop-blur border-b border-white/30">
+    <header className="sticky top-0 z-40 bg-slate-900/40 backdrop-blur-md border-b border-white/10">
       <div className="container mx-auto px-4 py-5">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -31,7 +31,7 @@ export function Header() {
                 </div>
               )}
             </div>
-            <ConnectButton />
+            <div className="drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]"><ConnectButton /></div>
           </div>
         </div>
       </div>

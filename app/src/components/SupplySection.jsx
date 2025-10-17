@@ -65,14 +65,14 @@ export function SupplySection() {
   }
 
   return (
-    <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl ring-1 ring-black/5 p-6">
-      <h3 className="text-xl font-semibold text-gray-900 mb-6">
+    <div className="bg-slate-900/60 backdrop-blur rounded-2xl shadow-xl ring-1 ring-white/10 p-6">
+      <h3 className="text-xl font-semibold text-white mb-6">
         Supply Assets
       </h3>
 
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-indigo-100/80 mb-2">
             Select Asset
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -82,13 +82,13 @@ export function SupplySection() {
                 onClick={() => setSelectedToken(token.symbol)}
                 className={`p-3 rounded-xl border-2 transition-all ${
                   selectedToken === token.symbol
-                    ? 'border-indigo-500 bg-indigo-50 shadow'
-                    : 'border-gray-200 hover:border-gray-300 hover:shadow'
+                    ? 'border-indigo-400/60 bg-slate-800/60 shadow'
+                    : 'border-white/10 hover:border-white/20 hover:shadow'
                 }`}
               >
                 <div className="text-center">
                   <div className="text-2xl mb-1">{token.icon}</div>
-                  <div className="text-sm font-medium">{token.symbol}</div>
+                  <div className="text-sm font-medium text-white">{token.symbol}</div>
                 </div>
               </button>
             ))}
@@ -96,7 +96,7 @@ export function SupplySection() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-indigo-100/80 mb-2">
             Amount
           </label>
           <div className="relative">
@@ -105,11 +105,11 @@ export function SupplySection() {
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="0.00"
-              className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent pr-16"
+              className="w-full p-3 border border-white/10 bg-slate-800/60 text-white placeholder-white/40 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent pr-16"
             />
             <button
               onClick={setMaxAmount}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-primary-600 hover:text-primary-700 font-medium"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-sm text-indigo-300 hover:text-indigo-200 font-medium"
             >
               MAX
             </button>
@@ -136,12 +136,12 @@ export function SupplySection() {
           </button>
         </div>
 
-        <div className="bg-gray-50 rounded-lg p-4">
-          <h4 className="font-medium text-gray-900 mb-2">Supply Info</h4>
-          <div className="space-y-1 text-sm text-gray-600">
+        <div className="bg-slate-800/60 rounded-lg p-4 border border-white/10">
+          <h4 className="font-medium text-white mb-2">Supply Info</h4>
+          <div className="space-y-1 text-sm text-indigo-100/80">
             <div className="flex justify-between">
               <span>Supply APY:</span>
-              <span className="text-green-600">3.2%</span>
+              <span className="text-green-300">3.2%</span>
             </div>
             <div className="flex justify-between">
               <span>Available:</span>
