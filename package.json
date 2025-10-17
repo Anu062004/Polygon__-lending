@@ -8,6 +8,7 @@
     "test": "hardhat test",
     "test:coverage": "hardhat coverage",
     "deploy:amoy": "hardhat run scripts/deploy.js --network amoy",
+    "sync:addresses": "node scripts/sync-addresses.js",
     "demo": "bash demo.sh",
     "node": "hardhat node",
     "clean": "hardhat clean"
@@ -19,11 +20,11 @@
     "polygon",
     "ethereum",
     "solidity"
-    
   ],
   "author": "Lending Protocol Team",
   "license": "MIT",
   "devDependencies": {
+    "@chainlink/contracts": "^1.5.0",
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
     "@nomicfoundation/hardhat-verify": "^2.0.0",
     "@openzeppelin/contracts": "^5.0.0",

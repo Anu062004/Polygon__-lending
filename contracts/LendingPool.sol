@@ -2,7 +2,7 @@
 pragma solidity ^0.8.21;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
@@ -11,6 +11,21 @@ import "./InterestRateModelAaveStyle.sol";
 import "./AToken.sol";
 import "./DebtToken.sol";
 import "./PoolConfigurator.sol";
+// Optional Chainlink aggregator interface for direct USD feeds
+// Minimal Chainlink interface (inline to avoid external package issues)
+interface AggregatorV3Interface {
+    function decimals() external view returns (uint8);
+    function latestRoundData()
+        external
+        view
+        returns (
+            uint80 roundId,
+            int256 answer,
+            uint256 startedAt,
+            uint256 updatedAt,
+            uint80 answeredInRound
+        );
+}
 
 /**
  * @title LendingPool
@@ -29,10 +44,14 @@ contract LendingPool is Ownable, ReentrancyGuard {
     mapping(address => AToken) public aTokens;
     mapping(address => DebtToken) public debtTokens;
     mapping(address => bool) public supportedAssets;
+    // Track list of supported assets for iteration in health-factor math
+    address[] private _assetList;
     
     // User data
     mapping(address => mapping(address => uint256)) public userCollateral; // user => asset => amount
     mapping(address => mapping(address => uint256)) public userBorrows; // user => asset => amount
+    // Public alias for frontends expecting userDeposits mapping
+    mapping(address => mapping(address => uint256)) public userDeposits; // mirrors userCollateral for UI
     
     // Pool data
     mapping(address => uint256) public totalSupplied;
@@ -42,6 +61,13 @@ contract LendingPool is Ownable, ReentrancyGuard {
     // Constants
     uint256 public constant BASIS_POINTS = 10000;
     uint256 public constant SECONDS_PER_YEAR = 365 days;
+    // Collateral parameters requested for convenience (pool also reads thresholds from configurator)
+    uint256 public constant COLLATERAL_FACTOR = 75; // 75%
+    uint256 public constant LIQUIDATION_BONUS = 5;  // 5%
+
+    // Optional Chainlink price feeds (token => feed)
+    mapping(address => AggregatorV3Interface) public priceFeeds;
+    event PriceFeedSet(address indexed token, address indexed feed);
     
     // Events
     event Deposit(address indexed user, address indexed asset, uint256 amount, uint256 aTokenAmount);
@@ -58,6 +84,8 @@ contract LendingPool is Ownable, ReentrancyGuard {
         uint256 bonus
     );
     event InterestAccrued(address indexed asset, uint256 supplyIndex, uint256 debtIndex, uint256 timestamp);
+    // New collateral event
+    event CollateralDeposited(address indexed user, address indexed token, uint256 amount);
 
     /**
      * @dev Constructor
@@ -92,6 +120,14 @@ contract LendingPool is Ownable, ReentrancyGuard {
         require(aToken != address(0), "Invalid aToken address");
         aTokens[asset] = AToken(aToken);
         supportedAssets[asset] = true;
+        // push to list if new
+        bool exists = false;
+        for (uint256 i = 0; i < _assetList.length; i++) {
+            if (_assetList[i] == asset) { exists = true; break; }
+        }
+        if (!exists) {
+            _assetList.push(asset);
+        }
     }
 
     /**
@@ -104,6 +140,60 @@ contract LendingPool is Ownable, ReentrancyGuard {
         require(asset != address(0), "Invalid asset address");
         require(debtToken != address(0), "Invalid debt token address");
         debtTokens[asset] = DebtToken(debtToken);
+    }
+
+    /**
+     * @dev Optional: set Chainlink price feed for a token
+     */
+    function setPriceFeed(address token, address feed) external onlyOwner {
+        require(token != address(0) && feed != address(0), "Invalid address");
+        priceFeeds[token] = AggregatorV3Interface(feed);
+        emit PriceFeedSet(token, feed);
+    }
+
+    /**
+     * @dev New: explicit collateral deposit helper for frontend clarity
+     */
+    function depositCollateral(address token, uint256 amount) external nonReentrant {
+        require(supportedAssets[token], "Asset not supported");
+        require(amount > 0, "Amount must be greater than 0");
+        require(configurator.isAssetActive(token), "Asset not active");
+
+        _accrueInterest(token);
+
+        // Pull tokens
+        IERC20(token).safeTransferFrom(msg.sender, address(this), amount);
+
+        // Accounting mirrors existing deposit path
+        userCollateral[msg.sender][token] += amount;
+        userDeposits[msg.sender][token] += amount;
+        totalSupplied[token] += amount;
+
+        uint256 aTokenAmount = aTokens[token].mint(msg.sender, amount);
+
+        emit Deposit(msg.sender, token, amount, aTokenAmount);
+        emit CollateralDeposited(msg.sender, token, amount);
+    }
+
+    /**
+     * @dev Returns user's total collateral value in USD (1e18), using Chainlink feed if configured,
+     *      otherwise falling back to PriceOracleMock.
+     */
+    function getUserCollateralValue(address user) public view returns (uint256 totalUsd1e18) {
+        for (uint256 i = 0; i < _getSupportedAssetsLength(); i++) {
+            address asset = _getSupportedAsset(i);
+            uint256 bal = userCollateral[user][asset];
+            if (bal == 0) continue;
+            totalUsd1e18 += _quoteUSD(asset, bal, IERC20Metadata(asset).decimals());
+        }
+    }
+
+    /**
+     * @dev Returns borrowable USD (1e18): collateralValue * COLLATERAL_FACTOR / 100
+     */
+    function getBorrowableAmount(address user) external view returns (uint256) {
+        uint256 cv = getUserCollateralValue(user);
+        return (cv * COLLATERAL_FACTOR) / 100;
     }
 
     /**
@@ -223,9 +313,10 @@ contract LendingPool is Ownable, ReentrancyGuard {
         totalBorrowed[asset] -= repayAmount;
         
         // Burn debt tokens
-        uint256 debtTokenAmount = debtTokens[asset].burn(msg.sender, repayAmount);
+        // Burn shares; ignore returned share amount to keep event stable
+        debtTokens[asset].burn(msg.sender, repayAmount);
         
-        emit Repay(msg.sender, asset, repayAmount, debtTokenAmount);
+        emit Repay(msg.sender, asset, repayAmount, repayAmount);
     }
 
     /**
@@ -336,6 +427,29 @@ contract LendingPool is Ownable, ReentrancyGuard {
         emit InterestAccrued(asset, aTokens[asset].getInterestIndex(), debtTokens[asset].getDebtIndex(), currentTimestamp);
     }
 
+    // ===== Pricing helpers =====
+    function _quoteUSD(address token, uint256 amount, uint8 tokenDecimals) internal view returns (uint256 usd1e18) {
+        AggregatorV3Interface feed = priceFeeds[token];
+        if (address(feed) != address(0)) {
+            (, int256 answer,,,) = feed.latestRoundData();
+            require(answer > 0, "Bad price");
+            uint8 pdec = feed.decimals();
+
+            uint256 normAmt = amount;
+            if (tokenDecimals < 18)      normAmt = amount * (10 ** (18 - tokenDecimals));
+            else if (tokenDecimals > 18) normAmt = amount / (10 ** (tokenDecimals - 18));
+
+            return (normAmt * uint256(answer)) / (10 ** pdec);
+        }
+
+        // Fallback to mock oracle (8 decimals)
+        uint256 p8 = oracle.getPrice(token);
+        uint256 normAmt2 = amount;
+        if (tokenDecimals < 18)      normAmt2 = amount * (10 ** (18 - tokenDecimals));
+        else if (tokenDecimals > 18) normAmt2 = amount / (10 ** (tokenDecimals - 18));
+        return (normAmt2 * p8) / 1e8;
+    }
+
     /**
      * @dev Calculates the health factor for a user
      * @param user Address of the user
@@ -422,22 +536,20 @@ contract LendingPool is Ownable, ReentrancyGuard {
         address debtAsset,
         uint256 debtAmount
     ) internal view returns (uint256) {
-        uint256 debtValue = oracle.getValue(debtAsset, debtAmount, IERC20Metadata(debtAsset).decimals());
-        uint256 collateralPrice = oracle.getPrice(collateralAsset);
-        uint256 liquidationBonus = configurator.getLiquidationBonus(collateralAsset);
-        
-        // Calculate collateral amount: (debtValue * liquidationBonus) / collateralPrice
-        uint256 collateralAmount = (debtValue * liquidationBonus) / (collateralPrice * BASIS_POINTS);
-        
-        // Convert to collateral asset decimals
+        uint256 debtValue = oracle.getValue(debtAsset, debtAmount, IERC20Metadata(debtAsset).decimals()); // 1e18 USD
+        uint256 price8 = oracle.getPrice(collateralAsset); // 1e8 USD per token
+        uint256 liquidationBonus = configurator.getLiquidationBonus(collateralAsset); // in bps (e.g., 10500)
         uint8 collateralDecimals = IERC20Metadata(collateralAsset).decimals();
-        if (collateralDecimals < 18) {
-            collateralAmount = collateralAmount / (10 ** (18 - collateralDecimals));
-        } else if (collateralDecimals > 18) {
-            collateralAmount = collateralAmount * (10 ** (collateralDecimals - 18));
-        }
-        
-        return collateralAmount;
+
+        // Scale price to 1e18 to match debtValue base
+        uint256 price1e18 = price8 * 1e10; // 1e8 -> 1e18
+        uint256 valueWithBonus = (debtValue * liquidationBonus) / BASIS_POINTS; // 1e18 USD
+
+        // tokens = valueUSD(1e18) / price(1e18) => tokens(1e0); then scale to token decimals
+        // Round up to avoid zero due to integer division on tiny amounts
+        uint256 numerator = valueWithBonus * (10 ** collateralDecimals);
+        uint256 amountTokens = (numerator + price1e18 - 1) / price1e18;
+        return amountTokens;
     }
 
     /**
@@ -513,9 +625,7 @@ contract LendingPool is Ownable, ReentrancyGuard {
      * @return Number of supported assets
      */
     function _getSupportedAssetsLength() internal view returns (uint256) {
-        // This is a simplified implementation
-        // In a real implementation, you would maintain a list of supported assets
-        return 2; // Assuming 2 assets (mUSDC and mBTC)
+        return _assetList.length;
     }
 
     /**
@@ -524,11 +634,8 @@ contract LendingPool is Ownable, ReentrancyGuard {
      * @return Address of the asset
      */
     function _getSupportedAsset(uint256 index) internal view returns (address) {
-        // This is a simplified implementation
-        // In a real implementation, you would maintain a list of supported assets
-        require(index < 2, "Invalid asset index");
-        // Return mock addresses - in real implementation, these would be stored
-        return index == 0 ? address(0x1) : address(0x2);
+        require(index < _assetList.length, "Invalid asset index");
+        return _assetList[index];
     }
 }
 

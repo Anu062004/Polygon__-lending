@@ -1,16 +1,7 @@
 // Contract addresses and ABIs
-// In a real implementation, these would be loaded from deployments/amoy.json
+// Now we try to read generated addresses from app/src/generated/addresses.json (written by scripts/sync-addresses.js)
 
-export const CONTRACT_ADDRESSES = {
-  lendingPool: '0x1234567890123456789012345678901234567890',
-  mUSDC: '0x1234567890123456789012345678901234567890',
-  mBTC: '0x1234567890123456789012345678901234567890',
-  oracle: '0x1234567890123456789012345678901234567890',
-  aUSDC: '0x1234567890123456789012345678901234567890',
-  aBTC: '0x1234567890123456789012345678901234567890',
-  debtUSDC: '0x1234567890123456789012345678901234567890',
-  debtBTC: '0x1234567890123456789012345678901234567890',
-}
+
 
 export const TOKENS = {
   mUSDC: {
@@ -32,7 +23,24 @@ export const TOKENS = {
 export function getContractAddresses() {
   return CONTRACT_ADDRESSES
 }
+let generated = null
+try {
+  // eslint-disable-next-line import/no-unresolved
+  generated = require('../generated/addresses.json')
+} catch (_) {
+  generated = null
+}
 
+export const CONTRACT_ADDRESSES = generated || {
+  lendingPool: '0x1234567890123456789012345678901234567890',
+  mUSDC: '0x1234567890123456789012345678901234567890',
+  mBTC: '0x1234567890123456789012345678901234567890',
+  oracle: '0x1234567890123456789012345678901234567890',
+  aUSDC: '0x1234567890123456789012345678901234567890',
+  aBTC: '0x1234567890123456789012345678901234567890',
+  debtUSDC: '0x1234567890123456789012345678901234567890',
+  debtBTC: '0x1234567890123456789012345678901234567890',
+}
 export function getTokenInfo(symbol) {
   return TOKENS[symbol]
 }

@@ -61,9 +61,17 @@ contract InterestRateModelAaveStyle {
         if (totalSupply == 0) {
             return 0;
         }
-        
-        uint256 borrowRate = this.getBorrowRate(totalBorrows, totalSupply);
+        // Borrow rate computed inline to keep function pure
         uint256 utilization = (totalBorrows * BASIS_POINTS) / totalSupply;
+        uint256 borrowRate;
+        if (utilization <= OPTIMAL_UTILIZATION) {
+            borrowRate = BASE_RATE_APR + (utilization * SLOPE1_APR) / OPTIMAL_UTILIZATION;
+        } else {
+            uint256 excessUtilization = utilization - OPTIMAL_UTILIZATION;
+            uint256 excessSlope = (excessUtilization * SLOPE2_APR) / (BASIS_POINTS - OPTIMAL_UTILIZATION);
+            borrowRate = BASE_RATE_APR + SLOPE1_APR + excessSlope;
+        }
+        borrowRate = (borrowRate * 1e18) / (BASIS_POINTS * SECONDS_PER_YEAR);
         
         // Supply rate = borrow rate * utilization * (1 - reserve factor)
         uint256 supplyRate = (borrowRate * utilization * (BASIS_POINTS - RESERVE_FACTOR)) / (BASIS_POINTS * BASIS_POINTS);
