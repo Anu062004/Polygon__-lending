@@ -6,6 +6,7 @@ import { WalletConnect } from './WalletConnect'
 import { MarketTable } from './MarketTable'
 import { PortfolioOverview } from './PortfolioOverview'
 import { SupplySection } from './SupplySection'
+import CollateralCard from './CollateralCard'
 import { BorrowSection } from './BorrowSection'
 import { LiquidationSection } from './LiquidationSection'
 import { FaucetSection } from './FaucetSection'
@@ -57,7 +58,8 @@ export function Dashboard() {
 
         <MarketTable />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <CollateralCard />
           <SupplySection />
           <BorrowSection />
         </div>

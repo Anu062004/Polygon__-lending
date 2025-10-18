@@ -5,7 +5,7 @@ import { toast } from 'react-hot-toast'
 import { CONTRACT_ADDRESSES, getAllTokens } from '../utils/contracts'
 
 const LENDING_POOL_ABI = [
-  'function depositCollateral(address token, uint256 amount) nonpayable',
+  'function depositCollateral(address token, uint256 amount)',
   'function getUserCollateralValue(address user) view returns (uint256)',
   'function getBorrowableAmount(address user) view returns (uint256)',
 ]
@@ -64,7 +64,15 @@ export default function CollateralCard() {
       const token = new ethers.Contract(selected.address, ERC20_ABI, signer)
       const parsed = ethers.parseUnits(amount, selected.decimals)
 
-      const allow = await token.allowance(address, LENDING_POOL_ADDRESS)
+      // Some tokens (or misconfigured addresses) may not implement allowance correctly.
+      // Wrap in try/catch and treat missing/zero as 0 allowance.
+      let allow = 0n
+      try {
+        allow = await token.allowance(address, LENDING_POOL_ADDRESS)
+      } catch (e) {
+        console.warn('allowance() failed, proceeding to approve()', e)
+        allow = 0n
+      }
       if (allow < parsed) {
         const txA = await token.approve(LENDING_POOL_ADDRESS, parsed)
         await txA.wait()
