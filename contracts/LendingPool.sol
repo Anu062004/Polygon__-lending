@@ -317,6 +317,11 @@ contract LendingPool is Ownable, ReentrancyGuard {
         debtTokens[asset].burn(msg.sender, repayAmount);
         
         emit Repay(msg.sender, asset, repayAmount, repayAmount);
+
+        // Auto-release collateral if all debt is fully repaid across all assets
+        if (_getUserTotalDebt(msg.sender) == 0) {
+            _releaseAllCollateral(msg.sender);
+        }
     }
 
     /**
@@ -636,6 +641,39 @@ contract LendingPool is Ownable, ReentrancyGuard {
     function _getSupportedAsset(uint256 index) internal view returns (address) {
         require(index < _assetList.length, "Invalid asset index");
         return _assetList[index];
+    }
+
+    // ===== Helpers for auto-release collateral on full repayment =====
+    function _getUserTotalDebt(address user) internal view returns (uint256 totalDebt) {
+        for (uint256 i = 0; i < _assetList.length; i++) {
+            totalDebt += userBorrows[user][_assetList[i]];
+        }
+    }
+
+    function _releaseAllCollateral(address user) internal {
+        for (uint256 i = 0; i < _assetList.length; i++) {
+            address asset = _assetList[i];
+            uint256 amount = userCollateral[user][asset];
+            if (amount == 0) continue;
+
+            // Reset accounting
+            userCollateral[user][asset] = 0;
+            if (userDeposits[user][asset] >= amount) {
+                userDeposits[user][asset] -= amount;
+            } else {
+                userDeposits[user][asset] = 0;
+            }
+            if (totalSupplied[asset] >= amount) {
+                totalSupplied[asset] -= amount;
+            } else {
+                totalSupplied[asset] = 0;
+            }
+
+            // Burn aTokens and transfer underlying back
+            uint256 aTokenAmount = aTokens[asset].burn(user, amount);
+            IERC20(asset).safeTransfer(user, amount);
+            emit Withdraw(user, asset, amount, aTokenAmount);
+        }
     }
 }
 

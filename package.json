@@ -7,11 +7,16 @@
     "compile": "hardhat compile",
     "test": "hardhat test",
     "test:coverage": "hardhat coverage",
-    "deploy:amoy": "hardhat run scripts/deploy.js --network amoy",
+    "deploy:amoy": "hardhat run scripts/deploy/polygonAmoy/deploy.js --network polygonAmoy",
+    "deploy:local": "hardhat run scripts/deploy/local/deploy.js --network localhost",
+    "deploy:hardhat": "hardhat run scripts/deploy/local/deploy.js --network hardhat",
     "sync:addresses": "node scripts/sync-addresses.js",
+    "oracle:start": "node updatePrices.js",
     "demo": "bash demo.sh",
     "node": "hardhat node",
-    "clean": "hardhat clean"
+    "clean": "hardhat clean",
+    "verify:amoy": "hardhat verify --network polygonAmoy",
+    "gas:report": "REPORT_GAS=true hardhat test"
   },
   "keywords": [
     "defi",

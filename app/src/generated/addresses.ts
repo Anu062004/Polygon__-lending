@@ -1,4 +1,22 @@
-{
+// Auto-generated file - do not edit manually
+export interface ContractAddresses {
+  lendingPool: string;
+  oracle: string;
+  mUSDC: string;
+  mBTC: string;
+  aUSDC: string;
+  aBTC: string;
+  debtUSDC: string;
+  debtBTC: string;
+  flashLoanProvider: string;
+  credoToken: string;
+  rewardDistributor: string;
+  oracleAggregator: string;
+  network: string;
+  chainId: number;
+}
+
+export const addresses: ContractAddresses = {
   "lendingPool": "0x610178dA211FEF7D417bC0e6FeD39F05609AD788",
   "oracle": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
   "mUSDC": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
@@ -13,4 +31,4 @@
   "oracleAggregator": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
   "network": "localhost",
   "chainId": 1337
-}
+};
