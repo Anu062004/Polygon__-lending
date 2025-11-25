@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 /**
  * @title OracleAggregator
  * @dev Aggregates multiple price oracles for enhanced security and reliability
- * @notice Provides fallback mechanisms and price validation for the Credo Protocol
+ * @notice Provides fallback mechanisms and price validation for the Debpol Protocol
  */
 // Oracle interface
 interface IPriceOracle {

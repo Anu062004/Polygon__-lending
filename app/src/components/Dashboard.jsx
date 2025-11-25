@@ -10,6 +10,9 @@ import CollateralCard from './CollateralCard'
 import { BorrowSection } from './BorrowSection'
 import { LiquidationSection } from './LiquidationSection'
 import { FaucetSection } from './FaucetSection'
+import { FlashLoanSection } from './FlashLoanSection'
+import { GovernanceSection } from './GovernanceSection'
+import { RewardsSection } from './RewardsSection'
 
 export function Dashboard() {
   const { isConnected, address } = useAccount()
@@ -67,6 +70,18 @@ export function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <LiquidationSection />
           <FaucetSection />
+        </div>
+
+        {/* Debpol Protocol Features */}
+        <div className="mt-8">
+          <h3 className="text-2xl font-bold text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.35)] mb-6 text-center">
+            Debpol Protocol Features
+          </h3>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <FlashLoanSection />
+            <GovernanceSection />
+            <RewardsSection />
+          </div>
         </div>
       </div>
     </div>

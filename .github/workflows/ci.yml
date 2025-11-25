@@ -1,8 +1,8 @@
-name: Credo Protocol Integration CI/CD
+name: Debpol Protocol Integration CI/CD
 
 on:
   push:
-    branches: [ main, develop, feature/credo-integration ]
+    branches: [ main, develop, feature/debpol-integration ]
   pull_request:
     branches: [ main, develop ]
 
@@ -250,7 +250,7 @@ jobs:
     - name: Notify on success
       if: ${{ needs.test.result == 'success' && needs.security.result == 'success' }}
       run: |
-        echo "✅ All tests passed! Credo Protocol integration is ready."
+        echo "✅ All tests passed! Debpol Protocol integration is ready."
         
     - name: Notify on failure
       if: ${{ needs.test.result == 'failure' || needs.security.result == 'failure' }}

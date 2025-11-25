@@ -1,7 +1,7 @@
-# Credo Protocol Integration Plan
+# Debpol Protocol Integration Plan
 
 ## Overview
-This document outlines the integration of Credo Protocol features into the Polygon Lending repository, replacing MOCA network dependencies with Polygon Amoy testnet configuration.
+This document outlines the integration of Debpol Protocol features into the Polygon Lending repository, replacing MOCA network dependencies with Polygon Amoy testnet configuration.
 
 ## Current Polygon Lending Architecture
 
@@ -24,9 +24,9 @@ This document outlines the integration of Credo Protocol features into the Polyg
 - ✅ Real-time price feeds
 - ✅ Frontend with 3D UI
 
-## Credo Protocol Features to Integrate
+## Debpol Protocol Features to Integrate
 
-Based on common DeFi lending protocol patterns, Credo Protocol likely includes:
+Based on common DeFi lending protocol patterns, Debpol Protocol likely includes:
 
 ### Core Features (Likely Present)
 - **Flash Loans**: Uncollateralized loans for arbitrage
@@ -77,7 +77,7 @@ Based on common DeFi lending protocol patterns, Credo Protocol likely includes:
 ### New Contracts Directory
 ```
 contracts/
-├── credo/
+├── debpol/
 │   ├── FlashLoanProvider.sol
 │   ├── GovernanceToken.sol
 │   ├── RewardDistributor.sol
@@ -130,8 +130,8 @@ MUSDC_TOKEN_ADDRESS=0x...
 MBTC_TOKEN_ADDRESS=0x...
 
 # Protocol Configuration
-GOVERNANCE_TOKEN_NAME=CredoToken
-GOVERNANCE_TOKEN_SYMBOL=CREDO
+GOVERNANCE_TOKEN_NAME=DebpolToken
+GOVERNANCE_TOKEN_SYMBOL=DEBPOL
 FLASH_LOAN_FEE_BPS=9
 PROTOCOL_FEE_BPS=100
 ```
@@ -236,7 +236,7 @@ PROTOCOL_FEE_BPS=100
 
 ## Next Steps
 
-1. **Create Credo contracts directory**
+1. **Create Debpol contracts directory**
 2. **Implement flash loan functionality**
 3. **Add governance token contract**
 4. **Update Hardhat configuration**

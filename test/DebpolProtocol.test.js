@@ -1,9 +1,9 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("Credo Protocol Integration Tests", function () {
+describe("Debpol Protocol Integration Tests", function () {
     let owner, user1, user2, user3;
-    let lendingPool, flashLoanProvider, credoToken, rewardDistributor, oracleAggregator;
+    let lendingPool, flashLoanProvider, debpolToken, rewardDistributor, oracleAggregator;
     let mUSDC, mBTC, amUSDC, amBTC, debtmUSDC, debtmBTC;
     let oracle, interestRateModel, configurator;
 
@@ -81,17 +81,17 @@ describe("Credo Protocol Integration Tests", function () {
             true // Active
         );
 
-        // Deploy Credo Protocol features
+        // Deploy Debpol Protocol features
         const FlashLoanProvider = await ethers.getContractFactory("FlashLoanProvider");
         flashLoanProvider = await FlashLoanProvider.deploy(await lendingPool.getAddress(), owner.address);
 
-        const CredoToken = await ethers.getContractFactory("CredoToken");
-        credoToken = await CredoToken.deploy(owner.address, owner.address, owner.address);
+        const DebpolToken = await ethers.getContractFactory("DebpolToken");
+        debpolToken = await DebpolToken.deploy(owner.address, owner.address, owner.address);
 
         const RewardDistributor = await ethers.getContractFactory("RewardDistributor");
         rewardDistributor = await RewardDistributor.deploy(
             await lendingPool.getAddress(),
-            await credoToken.getAddress(),
+            await debpolToken.getAddress(),
             owner.address
         );
 
@@ -127,18 +127,18 @@ describe("Credo Protocol Integration Tests", function () {
         });
     });
 
-    describe("Credo Token (Governance)", function () {
+    describe("Debpol Token (Governance)", function () {
         it("Should deploy governance token correctly", async function () {
-            expect(await credoToken.name()).to.equal("CredoToken");
-            expect(await credoToken.symbol()).to.equal("CREDO");
-            expect(await credoToken.totalSupply()).to.equal(ethers.parseEther("1000000000")); // 1B tokens
+            expect(await debpolToken.name()).to.equal("DebpolToken");
+            expect(await debpolToken.symbol()).to.equal("DEBPOL");
+            expect(await debpolToken.totalSupply()).to.equal(ethers.parseEther("1000000000")); // 1B tokens
         });
 
         it("Should add team member with vesting", async function () {
             const vestingAmount = ethers.parseEther("1000000"); // 1M tokens
-            await credoToken.addTeamMember(user1.address, vestingAmount);
+            await debpolToken.addTeamMember(user1.address, vestingAmount);
 
-            const memberInfo = await credoToken.getTeamMemberInfo(user1.address);
+            const memberInfo = await debpolToken.getTeamMemberInfo(user1.address);
             expect(memberInfo.totalAmount).to.equal(vestingAmount);
             expect(memberInfo.claimedAmount).to.equal(0);
             expect(memberInfo.startTime).to.be.greaterThan(0);
@@ -146,25 +146,25 @@ describe("Credo Protocol Integration Tests", function () {
 
         it("Should not allow claiming before cliff period", async function () {
             const vestingAmount = ethers.parseEther("1000000");
-            await credoToken.addTeamMember(user1.address, vestingAmount);
+            await debpolToken.addTeamMember(user1.address, vestingAmount);
 
             // Try to claim before cliff (1 year)
-            await expect(credoToken.connect(user1).claimVestedTokens()).to.be.reverted;
+            await expect(debpolToken.connect(user1).claimVestedTokens()).to.be.reverted;
         });
 
         it("Should update treasury and reserve addresses", async function () {
-            await credoToken.updateTreasury(user1.address);
-            await credoToken.updateReserve(user2.address);
+            await debpolToken.updateTreasury(user1.address);
+            await debpolToken.updateReserve(user2.address);
 
-            expect(await credoToken.treasury()).to.equal(user1.address);
-            expect(await credoToken.reserve()).to.equal(user2.address);
+            expect(await debpolToken.treasury()).to.equal(user1.address);
+            expect(await debpolToken.reserve()).to.equal(user2.address);
         });
     });
 
     describe("Reward Distributor", function () {
         it("Should deploy reward distributor correctly", async function () {
             expect(await rewardDistributor.lendingPool()).to.equal(await lendingPool.getAddress());
-            expect(await rewardDistributor.rewardToken()).to.equal(await credoToken.getAddress());
+            expect(await rewardDistributor.rewardToken()).to.equal(await debpolToken.getAddress());
         });
 
         it("Should update reward rate", async function () {
@@ -238,7 +238,7 @@ describe("Credo Protocol Integration Tests", function () {
     });
 
     describe("Integration Tests", function () {
-        it("Should perform complete lending flow with Credo features", async function () {
+        it("Should perform complete lending flow with Debpol features", async function () {
             // 1. User deposits mUSDC
             await mUSDC.connect(user1).approve(await lendingPool.getAddress(), ethers.parseUnits("1000", 6));
             await lendingPool.connect(user1).deposit(await mUSDC.getAddress(), ethers.parseUnits("1000", 6));
@@ -320,8 +320,8 @@ describe("Credo Protocol Integration Tests", function () {
             ).to.be.revertedWithCustomError(flashLoanProvider, "OwnableUnauthorizedAccount");
 
             await expect(
-                credoToken.connect(user1).addTeamMember(user2.address, ethers.parseEther("1000"))
-            ).to.be.revertedWithCustomError(credoToken, "OwnableUnauthorizedAccount");
+                debpolToken.connect(user1).addTeamMember(user2.address, ethers.parseEther("1000"))
+            ).to.be.revertedWithCustomError(debpolToken, "OwnableUnauthorizedAccount");
 
             await expect(
                 rewardDistributor.connect(user1).updateRewardRate(ethers.parseEther("100"))
@@ -340,7 +340,7 @@ describe("Credo Protocol Integration Tests", function () {
             ).to.be.revertedWith("Amount must be greater than 0");
 
             await expect(
-                credoToken.addTeamMember(user1.address, 0)
+                debpolToken.addTeamMember(user1.address, 0)
             ).to.be.revertedWith("Amount must be greater than 0");
         });
 
@@ -350,7 +350,7 @@ describe("Credo Protocol Integration Tests", function () {
             ).to.be.revertedWith("Invalid receiver address");
 
             await expect(
-                credoToken.addTeamMember(ethers.ZeroAddress, ethers.parseEther("1000"))
+                debpolToken.addTeamMember(ethers.ZeroAddress, ethers.parseEther("1000"))
             ).to.be.revertedWith("Invalid member address");
         });
 

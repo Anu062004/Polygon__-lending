@@ -1,14 +1,14 @@
-# DebPol - Decentralized Lending Protocol on Polygon
+# Polygon-Debpol-Lending-Protocol
 
 <div align="center">
 
-![DebPol Logo](https://img.shields.io/badge/DebPol-Lending%20Protocol-purple?style=for-the-badge&logo=ethereum)
+![Polygon-Debpol Logo](https://img.shields.io/badge/Polygon--Debpol-Lending%20Protocol-purple?style=for-the-badge&logo=ethereum)
 ![Polygon](https://img.shields.io/badge/Polygon-Amoy%20Testnet-8247E5?style=for-the-badge&logo=polygon)
 ![Solidity](https://img.shields.io/badge/Solidity-0.8.21-363636?style=for-the-badge&logo=solidity)
 ![React](https://img.shields.io/badge/React-18+-61DAFB?style=for-the-badge&logo=react)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
-**A comprehensive, production-ready decentralized lending protocol inspired by Aave, now enhanced with Credo Protocol features including flash loans, governance tokens, reward distribution, and advanced oracle aggregation.**
+**A unified, production-ready decentralized lending protocol that combines Polygon Lending Protocol's Aave-style functionality with Debpol Protocol's advanced features: governance tokens, reward distribution, flash loans, and oracle aggregation.**
 
 [🚀 Live Demo](https://your-demo-url.com) • [📖 Documentation](https://your-docs-url.com) • [🐛 Report Bug](https://github.com/Anu062004/Polygon__-lending/issues) • [💡 Request Feature](https://github.com/Anu062004/Polygon__-lending/issues)
 
@@ -18,7 +18,19 @@
 
 ## 🎯 Project Overview
 
-**DebPol** is a full-stack decentralized lending protocol that brings institutional-grade DeFi functionality to the Polygon ecosystem. Now enhanced with Credo Protocol features, it includes flash loans, governance tokens, reward distribution, and advanced oracle aggregation. Built with modern web technologies and featuring an immersive 3D interface, DebPol enables users to supply assets, earn interest, borrow against collateral, participate in liquidations, and access advanced DeFi features.
+**Polygon-Debpol-Lending-Protocol** is a unified full-stack decentralized lending protocol that merges the best of both worlds:
+
+- **Polygon Lending Protocol**: Core Aave-style lending functionality with deposits, withdrawals, borrowing, repayments, and liquidations
+- **Debpol Protocol**: Advanced features including governance tokens (DEBPOL), reward distribution, flash loans, and oracle aggregation
+
+Built with modern web technologies and featuring an immersive 3D interface, this unified protocol enables users to:
+- Supply assets and earn interest
+- Borrow against collateral
+- Participate in liquidations
+- Access flash loans for arbitrage
+- Participate in governance with DEBPOL tokens
+- Claim rewards for lending and borrowing
+- Benefit from multi-oracle price feeds
 
 ### ✨ Key Highlights
 
@@ -55,7 +67,21 @@ graph TB
     K[OpenZeppelin] --> A
     K --> B
     K --> C
+    
+    %% Debpol Protocol Features
+    L[FlashLoanProvider.sol] --> A
+    M[DebpolToken.sol] --> N[RewardDistributor.sol]
+    N --> A
+    O[OracleAggregator.sol] --> D
+    O --> G
+    
+    K --> L
+    K --> M
+    K --> N
+    K --> O
 ```
+<｜tool▁calls▁begin｜><｜tool▁call▁begin｜>
+run_terminal_cmd
 
 ### Frontend Layer
 
@@ -94,6 +120,8 @@ graph TB
 git clone https://github.com/Anu062004/Polygon__-lending.git
 cd Polygon__-lending
 ```
+
+**Note**: This repository has been merged with Debpol Protocol features and is now the unified Polygon-Debpol-Lending-Protocol.
 
 2. **Install dependencies**
 ```bash
@@ -172,16 +200,18 @@ npm run oracle:start
 | **Automated Price Updates** | ✅ | Live price updates every 60 seconds |
 | **Network Detection** | ✅ | Automatic Polygon Amoy network switching |
 
-### 🌟 Credo Protocol Features
+### 🌟 Debpol Protocol Features (Merged)
 
 | Feature | Status | Description |
 |---------|--------|-------------|
 | **Flash Loans** | ✅ | Uncollateralized loans for arbitrage (0.09% fee) |
-| **Governance Token** | ✅ | CREDO token with voting and vesting mechanisms |
-| **Reward Distribution** | ✅ | Dynamic rewards with asset-specific multipliers |
-| **Oracle Aggregation** | ✅ | Multi-oracle price feeds with deviation validation |
+| **Governance Token (DEBPOL)** | ✅ | ERC20Votes token with voting, delegation, and vesting mechanisms |
+| **Reward Distribution** | ✅ | Dynamic rewards for lenders and borrowers with asset-specific multipliers |
+| **Oracle Aggregation** | ✅ | Multi-oracle price feeds with deviation validation and Chainlink integration |
 | **Enhanced Security** | ✅ | Advanced reentrancy protection and access controls |
 | **Batch Operations** | ✅ | Efficient batch flash loan execution |
+| **Vesting System** | ✅ | Team token vesting with cliff period and linear release |
+| **Treasury Management** | ✅ | Protocol treasury and reserve allocations |
 
 ### 🎨 UI/UX Features
 
@@ -267,7 +297,7 @@ Our comprehensive test suite achieves **95%+ coverage** across:
 ### Polygon Amoy Testnet
 
 ```bash
-# Deploy all contracts (including Credo Protocol features)
+# Deploy all contracts (including Debpol Protocol features)
 npm run deploy:amoy
 
 # Deploy to local network for testing
@@ -295,7 +325,7 @@ All deployed contract addresses are automatically synced to `app/src/generated/a
   "debtUSDC": "0x...",
   "debtBTC": "0x...",
   "flashLoanProvider": "0x...",
-  "credoToken": "0x...",
+  "debpolToken": "0x...",
   "rewardDistributor": "0x...",
   "oracleAggregator": "0x...",
   "network": "polygonAmoy",
@@ -369,7 +399,7 @@ The demo showcases:
    - Execute arbitrage or other DeFi operations
 
 9. **Governance Participation**
-   - View CREDO token balance
+   - View DEBPOL token balance
    - Check vesting schedule (if team member)
    - Participate in governance votes
    - Claim vested tokens (after cliff period)
@@ -547,6 +577,39 @@ npm run test:coverage
 - **Documentation**: Update README and inline documentation
 
 ---
+
+## 🔄 Merge Information
+
+This repository represents the unified **Polygon-Debpol-Lending-Protocol**, which merges:
+
+- **Polygon Lending Protocol** (original): Core Aave-style lending functionality
+- **Debpol Protocol** (merged): Advanced features including governance, rewards, flash loans, and oracle aggregation
+
+### Merged Components
+
+**Smart Contracts:**
+- ✅ `FlashLoanProvider.sol` - Uncollateralized flash loans
+- ✅ `DebpolToken.sol` - Governance token with voting and vesting
+- ✅ `RewardDistributor.sol` - Dynamic reward distribution
+- ✅ `OracleAggregator.sol` - Multi-oracle price feeds
+
+**Frontend Components:**
+- ✅ `FlashLoanSection.jsx` - Flash loan interface
+- ✅ `GovernanceSection.jsx` - Token voting and vesting
+- ✅ `RewardsSection.jsx` - Reward claiming and tracking
+
+**Deployment:**
+- ✅ All Debpol contracts are deployed alongside core lending contracts
+- ✅ Addresses are automatically synced to frontend
+- ✅ Full integration with existing deployment scripts
+
+### Architecture Compatibility
+
+The merge maintains full compatibility with:
+- Polygon Amoy testnet deployment
+- Existing frontend components
+- Deployment scripts and configuration
+- Test suites for both protocols
 
 ## 📄 License
 

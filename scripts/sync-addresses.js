@@ -44,9 +44,9 @@ async function syncAddresses() {
             debtUSDC: deploymentConfig.contracts.debtmUSDC,
             debtBTC: deploymentConfig.contracts.debtmBTC,
             
-            // Credo Protocol features
+            // Debpol Protocol features
             flashLoanProvider: deploymentConfig.contracts.FlashLoanProvider,
-            credoToken: deploymentConfig.contracts.CredoToken,
+            debpolToken: deploymentConfig.contracts.DebpolToken,
             rewardDistributor: deploymentConfig.contracts.RewardDistributor,
             oracleAggregator: deploymentConfig.contracts.OracleAggregator,
             
@@ -73,7 +73,7 @@ export interface ContractAddresses {
   debtUSDC: string;
   debtBTC: string;
   flashLoanProvider: string;
-  credoToken: string;
+  debpolToken: string;
   rewardDistributor: string;
   oracleAggregator: string;
   network: string;
@@ -96,9 +96,9 @@ export const addresses: ContractAddresses = ${JSON.stringify(addresses, null, 2)
         console.log("\nTokens:");
         console.log("mUSDC:", addresses.mUSDC);
         console.log("mBTC:", addresses.mBTC);
-        console.log("\nCredo Protocol Features:");
+        console.log("\nDebpol Protocol Features:");
         console.log("FlashLoanProvider:", addresses.flashLoanProvider);
-        console.log("CredoToken:", addresses.credoToken);
+        console.log("DebpolToken:", addresses.debpolToken);
         console.log("RewardDistributor:", addresses.rewardDistributor);
         console.log("OracleAggregator:", addresses.oracleAggregator);
         

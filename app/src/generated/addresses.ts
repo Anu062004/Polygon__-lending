@@ -9,7 +9,7 @@ export interface ContractAddresses {
   debtUSDC: string;
   debtBTC: string;
   flashLoanProvider: string;
-  credoToken: string;
+  debpolToken: string;
   rewardDistributor: string;
   oracleAggregator: string;
   network: string;
@@ -26,7 +26,7 @@ export const addresses: ContractAddresses = {
   "debtUSDC": "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
   "debtBTC": "0x9A676e781A523b5d0C0e43731313A708CB607508",
   "flashLoanProvider": "0x3Aa5ebB10DC797CAC828524e59A333d0A371443c",
-  "credoToken": "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
+  "debpolToken": "0xc6e7DF5E7b4f2A278906862b61205850344D4e7d",
   "rewardDistributor": "0x59b670e9fA9D0A427751Af201D676719a970857b",
   "oracleAggregator": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707",
   "network": "localhost",

@@ -9,7 +9,7 @@ import "../LendingPool.sol";
 
 /**
  * @title FlashLoanProvider
- * @dev Provides flash loan functionality for the Credo Protocol
+ * @dev Provides flash loan functionality for the Debpol Protocol
  * @notice Allows uncollateralized loans for arbitrage and other DeFi operations
  */
 contract FlashLoanProvider is Ownable, ReentrancyGuard {

@@ -1,12 +1,12 @@
-# Credo Protocol Integration - README
+# Debpol Protocol Integration - README
 
 ## 🎯 Integration Overview
 
-This document provides comprehensive information about the integration of Credo Protocol features into the Polygon Lending repository. The integration successfully combines advanced DeFi lending functionality with enhanced features while maintaining compatibility with Polygon Amoy testnet.
+This document provides comprehensive information about the integration of Debpol Protocol features into the Polygon Lending repository. The integration successfully combines advanced DeFi lending functionality with enhanced features while maintaining compatibility with Polygon Amoy testnet.
 
 ## 🚀 What Was Integrated
 
-### Core Credo Protocol Features
+### Core Debpol Protocol Features
 
 #### 1. Flash Loan Provider (`FlashLoanProvider.sol`)
 - **Purpose**: Enables uncollateralized loans for arbitrage and DeFi operations
@@ -15,16 +15,16 @@ This document provides comprehensive information about the integration of Credo 
   - 0.09% fee structure
   - Reentrancy protection
   - Integration with existing lending pool
-- **Location**: `contracts/credo/FlashLoanProvider.sol`
+- **Location**: `contracts/debpol/FlashLoanProvider.sol`
 
-#### 2. Governance Token (`CredoToken.sol`)
+#### 2. Governance Token (`DebpolToken.sol`)
 - **Purpose**: ERC20 token with voting capabilities for protocol governance
 - **Key Features**:
   - ERC20Votes and ERC20Permit extensions
   - Team vesting mechanism (4-year vesting with 1-year cliff)
   - Treasury and reserve fund management
   - Community token distribution
-- **Location**: `contracts/credo/CredoToken.sol`
+- **Location**: `contracts/debpol/DebpolToken.sol`
 
 #### 3. Reward Distributor (`RewardDistributor.sol`)
 - **Purpose**: Distributes rewards to lenders and borrowers
@@ -33,7 +33,7 @@ This document provides comprehensive information about the integration of Credo 
   - Asset-specific reward multipliers
   - Real-time reward calculation
   - Integration with lending pool for staked value tracking
-- **Location**: `contracts/credo/RewardDistributor.sol`
+- **Location**: `contracts/debpol/RewardDistributor.sol`
 
 #### 4. Oracle Aggregator (`OracleAggregator.sol`)
 - **Purpose**: Aggregates multiple price oracles for enhanced security
@@ -59,11 +59,11 @@ POLYGON_AMOY_RPC_URL=https://rpc-amoy.polygon.technology/
 POLYGON_AMOY_CHAIN_ID=80002
 POLYGON_AMOY_DEPLOYER_KEY=0x...
 
-# Credo Protocol Features
+# Debpol Protocol Features
 FLASH_LOAN_FEE_BPS=9
 PROTOCOL_FEE_BPS=100
-GOVERNANCE_TOKEN_NAME=CredoToken
-GOVERNANCE_TOKEN_SYMBOL=CREDO
+GOVERNANCE_TOKEN_NAME=DebpolToken
+GOVERNANCE_TOKEN_SYMBOL=DEBPOL
 ```
 
 ### Deployment Scripts
@@ -80,7 +80,7 @@ GOVERNANCE_TOKEN_SYMBOL=CREDO
 - **Access Control**: Owner-only function restrictions
 
 ### Test Files
-- **Main Integration**: `test/CredoProtocol.test.js`
+- **Main Integration**: `test/DebpolProtocol.test.js`
 - **Existing Tests**: Preserved all original lending pool tests
 
 ### Test Scenarios
@@ -119,7 +119,7 @@ GOVERNANCE_TOKEN_SYMBOL=CREDO
 - Fee validation and limits
 - Liquidity checks before loan execution
 
-#### CredoToken
+#### DebpolToken
 - Vesting cliff period enforcement
 - Treasury and reserve address validation
 - Supply cap enforcement
@@ -215,7 +215,7 @@ npm run verify:amoy <CONTRACT_ADDRESS>
 ## 📈 Performance Metrics
 
 ### Contract Metrics
-- **Total Contracts**: 12 (4 new Credo contracts)
+- **Total Contracts**: 12 (4 new Debpol contracts)
 - **Total Lines**: ~2,500 (1,200 new lines)
 - **Test Coverage**: 95%+ for new features
 - **Gas Efficiency**: Optimized for Polygon network
@@ -337,4 +337,4 @@ npm run sync:addresses
 
 **Integration completed successfully! 🎉**
 
-The Credo Protocol features have been successfully integrated into the Polygon Lending repository, providing enhanced DeFi functionality while maintaining compatibility with Polygon Amoy testnet. All contracts are deployed, tested, and ready for use.
+The Debpol Protocol features have been successfully integrated into the Polygon Lending repository, providing enhanced DeFi functionality while maintaining compatibility with Polygon Amoy testnet. All contracts are deployed, tested, and ready for use.

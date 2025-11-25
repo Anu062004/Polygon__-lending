@@ -15,7 +15,7 @@ import { Fullscreen3DBackground } from './components/Fullscreen3DBackground'
 
 // Configure Wagmi
 const config = getDefaultConfig({
-  appName: 'DebPol',
+  appName: 'Polygon-Debpol-Lending-Protocol',
   projectId: 'YOUR_PROJECT_ID', // Replace with your WalletConnect project ID
   chains: [polygonAmoy],
   ssr: true,

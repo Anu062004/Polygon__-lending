@@ -8,11 +8,11 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 /**
- * @title CredoToken
- * @dev Governance token for the Credo Protocol
+ * @title DebpolToken
+ * @dev Governance token for the Debpol Protocol
  * @notice ERC20 token with voting capabilities for protocol governance
  */
-contract CredoToken is ERC20, ERC20Permit, ERC20Votes, Ownable, ReentrancyGuard {
+contract DebpolToken is ERC20, ERC20Permit, ERC20Votes, Ownable, ReentrancyGuard {
     // Constants
     uint256 public constant INITIAL_SUPPLY = 1_000_000_000 * 10**18; // 1 billion tokens
     uint256 public constant MAX_SUPPLY = 1_000_000_000 * 10**18; // 1 billion tokens max
@@ -53,7 +53,7 @@ contract CredoToken is ERC20, ERC20Permit, ERC20Votes, Ownable, ReentrancyGuard 
         address initialOwner,
         address _treasury,
         address _reserve
-    ) ERC20("CredoToken", "CREDO") ERC20Permit("CredoToken") Ownable(initialOwner) {
+    ) ERC20("DebpolToken", "DEBPOL") ERC20Permit("DebpolToken") Ownable(initialOwner) {
         require(_treasury != address(0), "Invalid treasury address");
         require(_reserve != address(0), "Invalid reserve address");
         

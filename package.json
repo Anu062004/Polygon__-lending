@@ -1,7 +1,7 @@
 {
-  "name": "aave-style-lending-protocol",
+  "name": "polygon-debpol-lending-protocol",
   "version": "1.0.0",
-  "description": "Aave-style decentralized lending protocol on Polygon Amoy testnet",
+  "description": "Unified Polygon Lending Protocol enhanced with Debpol Protocol features (governance, rewards, flash loans, oracle aggregation)",
   "main": "index.js",
   "scripts": {
     "compile": "hardhat compile",
@@ -10,13 +10,25 @@
     "deploy:amoy": "hardhat run scripts/deploy/polygonAmoy/deploy.js --network polygonAmoy",
     "deploy:local": "hardhat run scripts/deploy/local/deploy.js --network localhost",
     "deploy:hardhat": "hardhat run scripts/deploy/local/deploy.js --network hardhat",
+    "deploy:production": "powershell -ExecutionPolicy Bypass -File scripts/deploy-production.ps1",
+    "deploy:production:unix": "bash scripts/deploy-production.sh",
     "sync:addresses": "node scripts/sync-addresses.js",
     "oracle:start": "node updatePrices.js",
     "demo": "bash demo.sh",
     "node": "hardhat node",
     "clean": "hardhat clean",
     "verify:amoy": "hardhat verify --network polygonAmoy",
-    "gas:report": "REPORT_GAS=true hardhat test"
+    "gas:report": "REPORT_GAS=true hardhat test",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up -d",
+    "docker:down": "docker-compose down",
+    "docker:logs": "docker-compose logs -f",
+    "docker:restart": "docker-compose restart",
+    "k8s:deploy": "kubectl apply -f kubernetes/",
+    "k8s:delete": "kubectl delete -f kubernetes/",
+    "security:audit": "npm audit && npx slither .",
+    "performance:test": "npm run test && npm run test:coverage",
+    "production:health": "curl -f http://localhost:3000 && curl -f http://localhost:9090 && curl -f http://localhost:3001"
   },
   "keywords": [
     "defi",

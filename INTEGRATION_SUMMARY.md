@@ -1,15 +1,15 @@
-# 🎉 Credo Protocol Integration - COMPLETED
+# 🎉 Debpol Protocol Integration - COMPLETED
 
 ## Integration Summary
 
-The Credo Protocol features have been successfully integrated into the Polygon Lending repository! This integration brings advanced DeFi functionality while maintaining full compatibility with Polygon Amoy testnet.
+The Debpol Protocol features have been successfully integrated into the Polygon Lending repository! This integration brings advanced DeFi functionality while maintaining full compatibility with Polygon Amoy testnet.
 
 ## ✅ What Was Accomplished
 
 ### 🔧 Core Integration Tasks
 - [x] **Network Configuration**: Updated Hardhat config for Polygon Amoy
 - [x] **Environment Setup**: Created comprehensive environment variables
-- [x] **Contract Integration**: Added 4 new Credo Protocol contracts
+- [x] **Contract Integration**: Added 4 new Debpol Protocol contracts
 - [x] **Deployment Scripts**: Created automated deployment for Polygon Amoy
 - [x] **Testing Suite**: Added comprehensive tests for all new features
 - [x] **Frontend Integration**: Updated frontend configuration
@@ -23,8 +23,8 @@ The Credo Protocol features have been successfully integrated into the Polygon L
 - **Features**: Single/batch flash loans, 0.09% fee, reentrancy protection
 - **Integration**: Seamlessly integrated with existing lending pool
 
-#### 2. Governance Token (CredoToken)
-- **Contract**: `CredoToken.sol`
+#### 2. Governance Token (DebpolToken)
+- **Contract**: `DebpolToken.sol`
 - **Features**: ERC20Votes, vesting mechanism, treasury management
 - **Governance**: 4-year vesting with 1-year cliff
 
@@ -41,9 +41,9 @@ The Credo Protocol features have been successfully integrated into the Polygon L
 ### 📁 File Structure Created
 ```
 contracts/
-├── credo/
+├── debpol/
 │   ├── FlashLoanProvider.sol
-│   ├── CredoToken.sol
+│   ├── DebpolToken.sol
 │   └── RewardDistributor.sol
 ├── oracles/
 │   └── OracleAggregator.sol
@@ -56,7 +56,7 @@ scripts/
 └── sync-addresses.js
 
 test/
-└── CredoProtocol.test.js
+└── DebpolProtocol.test.js
 
 .github/workflows/
 └── ci.yml
@@ -129,7 +129,7 @@ npm run dev
 ## 📊 Performance Metrics
 
 ### Contract Statistics
-- **Total Contracts**: 12 (4 new Credo contracts)
+- **Total Contracts**: 12 (4 new Debpol contracts)
 - **New Code**: ~1,200 lines of Solidity
 - **Test Coverage**: 95%+ for new features
 - **Gas Efficiency**: Optimized for Polygon network
@@ -262,7 +262,7 @@ npm run sync:addresses
 
 ## 🏆 Integration Complete!
 
-The Credo Protocol integration has been successfully completed! The repository now includes:
+The Debpol Protocol integration has been successfully completed! The repository now includes:
 
 - ✅ **Advanced DeFi Features**: Flash loans, governance, rewards, enhanced oracles
 - ✅ **Polygon Amoy Support**: Full compatibility with Polygon testnet

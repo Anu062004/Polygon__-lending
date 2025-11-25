@@ -3,7 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 async function main() {
-    console.log("🚀 Starting Credo Protocol deployment to local Hardhat network...");
+    console.log("🚀 Starting Debpol Protocol deployment to local Hardhat network...");
     
     // Get deployer account
     const [deployer] = await ethers.getSigners();
@@ -174,8 +174,8 @@ async function main() {
         
         console.log("✅ Lending pool configured");
         
-        // 10. Deploy Credo Protocol Features
-        console.log("\n🌟 Deploying Credo Protocol Features...");
+        // 10. Deploy Debpol Protocol Features
+        console.log("\n🌟 Deploying Debpol Protocol Features...");
         
         // Deploy Flash Loan Provider
         const FlashLoanProvider = await ethers.getContractFactory("FlashLoanProvider");
@@ -188,24 +188,24 @@ async function main() {
         deploymentConfig.contracts.FlashLoanProvider = await flashLoanProvider.getAddress();
         
         // Deploy Governance Token
-        const CredoToken = await ethers.getContractFactory("CredoToken");
+        const DebpolToken = await ethers.getContractFactory("DebpolToken");
         // Create different addresses for treasury and reserve
         const treasuryAddress = ethers.Wallet.createRandom().address;
         const reserveAddress = ethers.Wallet.createRandom().address;
-        const credoToken = await CredoToken.deploy(
+        const debpolToken = await DebpolToken.deploy(
             treasuryAddress, // Treasury
             reserveAddress,   // Reserve
             deployer.address  // Owner
         );
-        await credoToken.waitForDeployment();
-        console.log("✅ CredoToken deployed to:", await credoToken.getAddress());
-        deploymentConfig.contracts.CredoToken = await credoToken.getAddress();
+        await debpolToken.waitForDeployment();
+        console.log("✅ DebpolToken deployed to:", await debpolToken.getAddress());
+        deploymentConfig.contracts.DebpolToken = await debpolToken.getAddress();
         
         // Deploy Reward Distributor
         const RewardDistributor = await ethers.getContractFactory("RewardDistributor");
         const rewardDistributor = await RewardDistributor.deploy(
             await lendingPool.getAddress(),
-            await credoToken.getAddress(),
+            await debpolToken.getAddress(),
             deployer.address
         );
         await rewardDistributor.waitForDeployment();
@@ -251,7 +251,7 @@ async function main() {
             contracts: {
                 LendingPool: await lendingPool.getAddress(),
                 FlashLoanProvider: await flashLoanProvider.getAddress(),
-                CredoToken: await credoToken.getAddress(),
+                DebpolToken: await debpolToken.getAddress(),
                 RewardDistributor: await rewardDistributor.getAddress(),
                 OracleAggregator: await oracleAggregator.getAddress(),
                 mUSDC: await mUSDC.getAddress(),
@@ -276,7 +276,7 @@ async function main() {
         console.log("\n📋 Contract Addresses:");
         console.log("LendingPool:", await lendingPool.getAddress());
         console.log("FlashLoanProvider:", await flashLoanProvider.getAddress());
-        console.log("CredoToken:", await credoToken.getAddress());
+        console.log("DebpolToken:", await debpolToken.getAddress());
         console.log("RewardDistributor:", await rewardDistributor.getAddress());
         console.log("OracleAggregator:", await oracleAggregator.getAddress());
         console.log("mUSDC:", await mUSDC.getAddress());

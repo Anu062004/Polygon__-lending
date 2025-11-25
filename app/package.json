@@ -1,7 +1,7 @@
 {
-  "name": "aave-style-lending-frontend",
+  "name": "polygon-debpol-lending-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Aave-style lending protocol",
+  "description": "Frontend for unified Polygon-Debpol Lending Protocol",
   "type": "module",
   "scripts": {
     "dev": "vite",

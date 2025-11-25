@@ -6,11 +6,11 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "../LendingPool.sol";
-import "./CredoToken.sol";
+import "./DebpolToken.sol";
 
 /**
  * @title RewardDistributor
- * @dev Distributes rewards to lenders and borrowers in the Credo Protocol
+ * @dev Distributes rewards to lenders and borrowers in the Debpol Protocol
  * @notice Manages reward distribution based on user activity and protocol performance
  */
 contract RewardDistributor is Ownable, ReentrancyGuard {
@@ -22,7 +22,7 @@ contract RewardDistributor is Ownable, ReentrancyGuard {
     
     // Core components
     LendingPool public lendingPool;
-    CredoToken public rewardToken;
+    DebpolToken public rewardToken;
     
     // Reward configuration
     uint256 public rewardRatePerSecond; // Rewards per second
@@ -64,7 +64,7 @@ contract RewardDistributor is Ownable, ReentrancyGuard {
         require(_rewardToken != address(0), "Invalid reward token address");
         
         lendingPool = LendingPool(_lendingPool);
-        rewardToken = CredoToken(_rewardToken);
+        rewardToken = DebpolToken(_rewardToken);
         lastUpdateTime = block.timestamp;
     }
 
